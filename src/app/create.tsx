@@ -41,7 +41,7 @@ const CreateSnippetScreen = () => {
     //Run query to insert the snippet into the database with help of runAsync method
     await db.runAsync(
       `INSERT INTO snippets (id, title, language, code, tags, folderId, isFavorite, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [id, title, language, code, tags, null, false, new Date().toISOString()],
+      [id, title, language, code, tags, null, 0, new Date().toISOString()],
     );
 
     //After creating the snippet, navigate back to the previous screen

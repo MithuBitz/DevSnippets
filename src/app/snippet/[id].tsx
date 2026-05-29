@@ -1,14 +1,15 @@
 import { Snippet } from "@/types";
 import { getDB } from "@/utils/database";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 const SnippetDetailsScreen = () => {
@@ -30,12 +31,14 @@ const SnippetDetailsScreen = () => {
         `SELECT * FROM snippets WHERE id = ?`,
         [id],
       );
+      console.log("result", result);
 
       //IF the snippet is found, set the snippet state
       //Set the isFavorite state to the value of the snippet.isFavorite
       if (result) {
-        setSnippet(result);
-        setIsFav(result.isFavorite === true);
+        const isFavorite = Boolean(result.isFavorite);
+        setSnippet({ ...result, isFavorite });
+        setIsFav(isFavorite);
       }
     })();
   }, [id]);
@@ -55,6 +58,7 @@ const SnippetDetailsScreen = () => {
     ]);
     //toggle the isFav state
     setIsFav(!isFav);
+    // console.log("isFav", isFav);
   };
 
   //Ai implementation
@@ -80,8 +84,14 @@ const SnippetDetailsScreen = () => {
     >
       <View style={styles.header}>
         <Text style={styles.title}>{snippet.title}</Text>
-        <TouchableOpacity onPress={toggleFav}>
-          <Text style={{ fontSize: 24 }}>{isFav ? "⭐" : "☆"}</Text>
+        <TouchableOpacity onPress={() => toggleFav()}>
+          <Text style={{ fontSize: 24 }}>
+            {isFav ? (
+              <Ionicons name="heart" size={24} color="red" />
+            ) : (
+              <Ionicons name="heart-outline" size={24} color="white" />
+            )}
+          </Text>
         </TouchableOpacity>
       </View>
       <Text style={styles.lang}>{snippet.language}</Text>
