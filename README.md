@@ -1,56 +1,145 @@
-# Welcome to your Expo app 👋
+# Dev Snippets
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A cross-platform mobile app for saving, organizing, and revisiting code snippets locally on your device. Built with **Expo SDK 55** and **Expo Router**, Dev Snippets keeps your snippets in a local SQLite database with optional JSON backup and restore.
 
-## Get started
+## Features
 
-1. Install dependencies
+| Area | Description |
+|------|-------------|
+| **Snippet library** | Create snippets with title, language, code, and comma-separated tags |
+| **Home** | Browse all snippets (newest first), open details, and toggle light/dark theme |
+| **Favorites** | Filter and view snippets marked as favorites |
+| **Snippet details** | View full code, toggle favorite, delete with confirmation |
+| **Languages** | Built-in picker (JavaScript, TypeScript, Python, SQL, Bash, C++, Java, HTML/CSS) |
+| **Preferences** | Default language stored with AsyncStorage |
+| **Backup & restore** | Export SQLite data to `devsnippet_backup.json` via the File System API |
+| **Navigation** | Tab bar with custom styling and liquid glass effect on supported devices |
 
-   ```bash
-   npm install
-   ```
+> **Planned / in progress:** AI code explanation (SecureStore for API keys), full import flow via document picker.
 
-2. Start the app
+## Tech stack
 
-   ```bash
-   npx expo start
-   ```
+- [Expo](https://docs.expo.dev/) ~55 · [Expo Router](https://docs.expo.dev/router/introduction/) ~55
+- [React Native](https://reactnative.dev/) 0.83 · [React](https://react.dev/) 19
+- [TypeScript](https://www.typescriptlang.org/) 5.9
+- [expo-sqlite](https://docs.expo.dev/versions/v55.0.0/sdk/sqlite/) — local snippet storage (WAL mode)
+- [@react-native-async-storage/async-storage](https://react-native-async-storage.github.io/async-storage/) — user preferences
+- [expo-secure-store](https://docs.expo.dev/versions/v55.0.0/sdk/securestore/) — reserved for sensitive settings
+- [expo-file-system](https://docs.expo.dev/versions/v55.0.0/sdk/filesystem/) — JSON backup files
 
-In the output, you'll find options to open the app in a
+## Prerequisites
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- [Node.js](https://nodejs.org/) (LTS recommended)
+- [npm](https://www.npmjs.com/) or [Bun](https://bun.sh/)
+- For device testing: [Expo Go](https://expo.dev/go) on iOS/Android, or Xcode / Android Studio for native builds
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Getting started
 
-## Get a fresh project
-
-When you're ready, run:
+### 1. Clone and install
 
 ```bash
-npm run reset-project
+git clone <repository-url>
+cd dev-snippet
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+If you use Bun:
 
-### Other setup steps
+```bash
+bun install
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+### 2. Start the development server
 
-## Learn more
+```bash
+npm start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Then press `i` for iOS simulator, `a` for Android emulator, or scan the QR code with Expo Go.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Platform-specific shortcuts
 
-## Join the community
+```bash
+npm run android   # Expo start — Android
+npm run ios       # Expo start — iOS
+npm run web       # Expo start — web
+```
 
-Join our community of developers creating universal apps.
+### 3. Lint
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npm run lint
+```
+
+## Project structure
+
+```
+dev-snippet/
+├── app.json                 # Expo app config (scheme: devsnippet)
+├── assets/                  # Icons, splash, favicon
+├── src/
+│   ├── app/                 # Expo Router file-based routes
+│   │   ├── _layout.tsx      # Root stack (tabs, create modal, snippet detail)
+│   │   ├── create.tsx       # New snippet form
+│   │   ├── snippet/[id].tsx # Snippet detail screen
+│   │   └── (tabs)/          # Bottom tab navigator
+│   │       ├── index.tsx    # Home — snippet list & theme toggle
+│   │       ├── favorites.tsx
+│   │       ├── files.tsx    # Export / import backup
+│   │       └── settings.tsx # Default language & preferences
+│   ├── contexts/
+│   │   └── theme-context.tsx
+│   ├── services/
+│   │   └── storage.ts       # AsyncStorage, backup, restore helpers
+│   ├── utils/
+│   │   └── database.ts      # SQLite init & schema
+│   └── types.ts             # Snippet type definition
+├── package.json
+└── tsconfig.json            # Path alias: @/* → src/*
+```
+
+## Data model
+
+Snippets are stored in SQLite (`dev-snippet.db`):
+
+| Field | Type | Notes |
+|-------|------|--------|
+| `id` | TEXT | Primary key |
+| `title` | TEXT | Required |
+| `language` | TEXT | Required |
+| `code` | TEXT | Required |
+| `tags` | TEXT | Comma-separated |
+| `folderId` | TEXT | Nullable (folders reserved) |
+| `isFavorite` | INTEGER | `0` or `1` |
+| `createdAt` | TEXT | ISO timestamp |
+
+Backups are written to the app document directory as `devsnippet_backup.json`.
+
+## Configuration
+
+| Setting | Location |
+|---------|----------|
+| App name, icons, plugins | `app.json` |
+| Deep link scheme | `devsnippet` |
+| Typed routes & React Compiler | Enabled in `app.json` experiments |
+| TypeScript paths | `@/*` → `./src/*` in `tsconfig.json` |
+
+## Development notes
+
+- **Expo SDK 55:** Use the [versioned Expo docs](https://docs.expo.dev/versions/v55.0.0/) when adding or changing native APIs.
+- **Agents / AI tools:** See `AGENTS.md` for project-specific guidance for coding assistants.
+- **Native projects:** `ios/` and `android/` are gitignored; run `npx expo prebuild` when you need custom native code.
+
+## Scripts reference
+
+| Command | Description |
+|---------|-------------|
+| `npm start` | Start Expo dev server |
+| `npm run android` | Start with Android |
+| `npm run ios` | Start with iOS |
+| `npm run web` | Start web build |
+| `npm run lint` | Run ESLint (expo config) |
+
+## License
+
+Private project (`"private": true` in `package.json`). Add a license file if you plan to open-source or distribute the app.
