@@ -19,13 +19,35 @@ A cross-platform mobile app for saving, organizing, and revisiting code snippets
 
 ## Tech stack
 
-- [Expo](https://docs.expo.dev/) ~55 · [Expo Router](https://docs.expo.dev/router/introduction/) ~55
-- [React Native](https://reactnative.dev/) 0.83 · [React](https://react.dev/) 19
-- [TypeScript](https://www.typescriptlang.org/) 5.9
-- [expo-sqlite](https://docs.expo.dev/versions/v55.0.0/sdk/sqlite/) — local snippet storage (WAL mode)
-- [@react-native-async-storage/async-storage](https://react-native-async-storage.github.io/async-storage/) — user preferences
-- [expo-secure-store](https://docs.expo.dev/versions/v55.0.0/sdk/securestore/) — reserved for sensitive settings
-- [expo-file-system](https://docs.expo.dev/versions/v55.0.0/sdk/filesystem/) — JSON backup files
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=react,ts,expo,androidstudio,apple,bun,nodejs,git&theme=dark" alt="Core tech stack" />
+</p>
+
+<p align="center">
+  <a href="https://docs.expo.dev/"><img src="https://img.shields.io/badge/Expo-55.0-000020?style=for-the-badge&logo=expo&logoColor=white" alt="Expo 55" /></a>
+  <a href="https://docs.expo.dev/router/introduction/"><img src="https://img.shields.io/badge/Expo_Router-55.0-000020?style=for-the-badge&logo=expo&logoColor=white" alt="Expo Router" /></a>
+  <a href="https://reactnative.dev/"><img src="https://img.shields.io/badge/React_Native-0.83-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React Native" /></a>
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /></a>
+</p>
+
+<p align="center">
+  <a href="https://docs.expo.dev/versions/v55.0.0/sdk/sqlite/"><img src="https://img.shields.io/badge/expo--sqlite-local_DB-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="expo-sqlite" /></a>
+  <a href="https://react-native-async-storage.github.io/async-storage/"><img src="https://img.shields.io/badge/AsyncStorage-preferences-764ABC?style=for-the-badge&logo=react&logoColor=white" alt="AsyncStorage" /></a>
+  <a href="https://docs.expo.dev/versions/v55.0.0/sdk/securestore/"><img src="https://img.shields.io/badge/SecureStore-secrets-000020?style=for-the-badge&logo=expo&logoColor=white" alt="SecureStore" /></a>
+  <a href="https://docs.expo.dev/versions/v55.0.0/sdk/filesystem/"><img src="https://img.shields.io/badge/File_System-JSON_backup-239120?style=for-the-badge&logo=json&logoColor=white" alt="File System" /></a>
+  <a href="https://eslint.org/"><img src="https://img.shields.io/badge/ESLint-expo_config-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="ESLint" /></a>
+</p>
+
+| Layer | Technology | Role |
+|-------|------------|------|
+| **Framework** | [Expo](https://docs.expo.dev/) ~55 · [Expo Router](https://docs.expo.dev/router/introduction/) ~55 | App shell, file-based navigation |
+| **UI** | [React Native](https://reactnative.dev/) 0.83 · [React](https://react.dev/) 19 | Cross-platform UI |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) 5.9 | Type-safe app code |
+| **Storage** | [expo-sqlite](https://docs.expo.dev/versions/v55.0.0/sdk/sqlite/) | Snippet database (WAL mode) |
+| **Preferences** | [AsyncStorage](https://react-native-async-storage.github.io/async-storage/) | Default language & settings |
+| **Security** | [expo-secure-store](https://docs.expo.dev/versions/v55.0.0/sdk/securestore/) | Reserved for sensitive config |
+| **Files** | [expo-file-system](https://docs.expo.dev/versions/v55.0.0/sdk/filesystem/) | JSON backup export |
 
 ## Prerequisites
 
