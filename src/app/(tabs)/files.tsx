@@ -1,6 +1,7 @@
 import { backupData } from "@/services/storage";
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const FilesScreen = () => {
   const [status, setStatus] = useState<string>("");
@@ -32,7 +33,7 @@ const FilesScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Data Management</Text>
       <Text style={styles.sub}>
         Export your SQLite database to a JSON file using the FileSystem, or
@@ -51,7 +52,7 @@ const FilesScreen = () => {
       </TouchableOpacity>
 
       {status ? <Text style={styles.status}>{status}</Text> : null}
-    </View>
+    </SafeAreaView>
   );
 };
 

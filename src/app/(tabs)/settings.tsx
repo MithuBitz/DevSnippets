@@ -1,12 +1,7 @@
 import { getDefaultLanguage, saveDefaultLanguage } from "@/services/storage";
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SettingScreen = () => {
   const [defLang, setDefLang] = useState("JavaScript");
@@ -27,7 +22,7 @@ const SettingScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Preferences (AsyncStorage)</Text>
       <TextInput
         style={styles.input}
@@ -55,7 +50,7 @@ const SettingScreen = () => {
       </TouchableOpacity>
 
       {saved && <Text style={styles.saved}>✅ Settings saved securely!</Text>}
-    </View>
+    </SafeAreaView>
   );
 };
 

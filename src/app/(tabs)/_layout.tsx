@@ -1,35 +1,31 @@
+import { ThemeProvider, useTheme } from "@/contexts/theme-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 import { Tabs } from "expo-router";
-import {
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  useColorScheme,
-} from "react-native";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
 const TAB_ICON_SIZE = 22;
 
 const palette = {
   light: {
-    bar: "#FFFFFF",
-    barBorder: "rgba(15, 23, 42, 0.08)",
-    active: "#4F46E5",
-    inactive: "#94A3B8",
-    activeBg: "rgba(79, 70, 229, 0.12)",
-    label: "#0F172A",
-    shadow: "#0F172A",
+    background: "#fff",
+    bar: "#f5f5f5",
+    barBorder: "rgba(26, 26, 26, 0.08)",
+    active: "#6c63ff",
+    inactive: "#666666",
+    activeBg: "rgba(108, 99, 255, 0.12)",
+    label: "#1a1a1a",
+    shadow: "#1a1a1a",
   },
   dark: {
-    bar: "#1E293B",
-    barBorder: "rgba(148, 163, 184, 0.12)",
-    active: "#818CF8",
-    inactive: "#64748B",
-    activeBg: "rgba(129, 140, 248, 0.18)",
-    label: "#F8FAFC",
+    background: "#121212",
+    bar: "#1e1e1e",
+    barBorder: "rgba(170, 170, 170, 0.12)",
+    active: "#9d97ff",
+    inactive: "#AAAAAA",
+    activeBg: "rgba(157, 151, 255, 0.18)",
+    label: "#ffffff",
     shadow: "#000000",
   },
 } as const;
@@ -40,13 +36,20 @@ function MyTabBar({
   navigation,
   insets,
 }: BottomTabBarProps) {
-  const scheme = useColorScheme() === "dark" ? "dark" : "light";
+  const { isDark } = useTheme();
+  const scheme = isDark ? "dark" : "light";
   const colors = palette[scheme];
   const useGlass = isLiquidGlassAvailable();
 
   return (
     <View
-      style={[styles.wrapper, { paddingBottom: Math.max(insets.bottom, 12) }]}
+      style={[
+        styles.wrapper,
+        {
+          paddingBottom: Math.max(insets.bottom, 12),
+          backgroundColor: colors.background,
+        },
+      ]}
     >
       {useGlass ? (
         <GlassView
@@ -178,12 +181,16 @@ function TabBarContent({
   );
 }
 
-export default function TabLayout() {
+function TabsNavigator() {
+  const { isDark } = useTheme();
+  const colors = palette[isDark ? "dark" : "light"];
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
+        sceneStyle: { backgroundColor: colors.background },
       }}
       tabBar={(props) => <MyTabBar {...props} />}
     >
@@ -219,9 +226,7 @@ export default function TabLayout() {
           title: "Files",
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
-              name={
-                focused ? "file-tray" : "file-tray-outline"
-              }
+              name={focused ? "file-tray" : "file-tray-outline"}
               size={TAB_ICON_SIZE}
               color={color}
             />
@@ -242,6 +247,14 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+  );
+}
+
+export default function TabLayout() {
+  return (
+    <ThemeProvider>
+      <TabsNavigator />
+    </ThemeProvider>
   );
 }
 
