@@ -8,14 +8,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const FavScreen = ({ navigation }: any) => {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
 
-  const loadFavs = async () => {
+  const loadFavs = useCallback(async () => {
     const db = await getDB();
 
     const results = await db.getAllAsync<Snippet>(`
       SELECT * FROM snippets WHERE isFavorite = 1 ORDER BY createdAt DESC
     `);
     setSnippets(results);
-  };
+  }, []);
 
   //Each time the screen is focused, load the favs
   //Each time the screen is focused, load the favs
