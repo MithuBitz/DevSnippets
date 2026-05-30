@@ -1,10 +1,11 @@
 import { Snippet } from "@/types";
 import { getDB } from "@/utils/database";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -59,6 +60,29 @@ const SnippetDetailsScreen = () => {
     //toggle the isFav state
     setIsFav(!isFav);
     // console.log("isFav", isFav);
+  };
+
+  const handleDelete = () => {
+    if (!snippet) return;
+
+    Alert.alert(
+      "Delete Snippet",
+      `Are you sure you want to delete "${snippet.title}"? This cannot be undone.`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            const db = await getDB();
+            await db.runAsync(`DELETE FROM snippets WHERE id = ?`, [
+              snippet.id,
+            ]);
+            router.back();
+          },
+        },
+      ],
+    );
   };
 
   //Ai implementation
@@ -116,6 +140,10 @@ const SnippetDetailsScreen = () => {
           <Text style={styles.explainText}>{explanation}</Text>
         </View>
       )}
+
+      <TouchableOpacity style={styles.deleteBtn} onPress={handleDelete}>
+        <Text style={styles.deleteBtnText}>Delete Snippet</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -156,4 +184,12 @@ const styles = StyleSheet.create({
     borderColor: "#8957E5",
   },
   explainText: { color: "#C9D1D9", fontSize: 14, lineHeight: 22 },
+  deleteBtn: {
+    backgroundColor: "#DA3633",
+    padding: 14,
+    borderRadius: 6,
+    alignItems: "center",
+    marginTop: 32,
+  },
+  deleteBtnText: { color: "#FFF", fontWeight: "bold" },
 });
